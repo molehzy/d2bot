@@ -1,0 +1,90 @@
+﻿.版本 2
+
+.程序集 类_Bungie, , 公开
+.子程序 User_GetBungieNetUserById, 文本型, 公开
+    .参数 ID, 文本型
+
+    
+
+.子程序 User_SearchUsers, 文本型, 公开
+    .参数 q, 文本型
+
+    
+
+.子程序 User_GetMembershipDataById, 文本型, 公开
+    .参数 membershipId, 文本型
+    .参数 membershipType, 文本型
+
+    
+
+.子程序 User_GetMembershipFromHardLinkedCredential, 文本型, 公开
+    .参数 credential, 文本型
+
+    
+
+.子程序 Destiny2_GetDestinyManifest, 文本型, 公开
+    
+
+.子程序 Destiny2_SearchDestinyPlayer, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 displayName, 文本型
+
+    
+
+.子程序 Destiny2_GetProfile, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 membershipId, 文本型
+    .参数 components, 文本型
+
+    
+
+.子程序 Destiny2_GetHistoricalStatsForAccount, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 membershipId, 文本型
+
+    
+
+.子程序 Destiny2_GetActivityHistory, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 MembershipId, 文本型
+    .参数 characterId, 文本型
+    .参数 count, 文本型
+    .参数 mode, 文本型
+    .参数 page, 文本型
+
+    
+
+.子程序 置秘钥, , 公开
+    .参数 X_API_KEY, 文本型
+
+    
+
+.子程序 置代理, , 公开
+    .参数 地址, 文本型, , 格式 0.0.0.0:0
+
+    
+
+.子程序 更新jsonWCCP_chs, 文本型, 公开, 成功返回 "0"
+    
+
+.子程序 更新DestinyActivityDefinition, 文本型, 公开, 成功返回 "0"
+    
+
+.子程序 更新DestinyActivityModifierDefinition, 文本型, 公开, 成功返回 "0"
+    
+
+.子程序 classType转文本, 文本型, 公开
+    .参数 classType, 文本型
+
+    
+
+.子程序 classHash转文本, 文本型, 公开
+    .参数 classHash, 文本型
+
+    
+
+.子程序 ActivityHash转文本, 文本型, 公开
+    .参数 Hash, 文本型
+
+    
+

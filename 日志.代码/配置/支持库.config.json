@@ -1,0 +1,50 @@
+﻿[
+    {
+        "CmdCount": 657,
+        "Guid": "d09f2340818511d396f6aaf844c7e325",
+        "Key": "krnln",
+        "MaxRefConstPos": 57,
+        "MaxRefObjectPos": 5,
+        "Name": "系统核心支持库",
+        "Version": {
+            "Major": 5,
+            "Minor": 7
+        }
+    },
+    {
+        "CmdCount": 28,
+        "Guid": "361C58F8-3D5B-4d02-9137-C4BD515941B0",
+        "Key": "CommonSupport",
+        "MaxRefConstPos": 0,
+        "MaxRefObjectPos": 3,
+        "Name": "常用功能支持库",
+        "Version": {
+            "Major": 2,
+            "Minor": 0
+        }
+    },
+    {
+        "CmdCount": 313,
+        "Guid": "AA50CDD5A14C4C5DB81BAE05DE4DDE6D",
+        "Key": "e2ee",
+        "MaxRefConstPos": 0,
+        "MaxRefObjectPos": 0,
+        "Name": "E2EE互联网服务器套件2.7.2",
+        "Version": {
+            "Major": 2,
+            "Minor": 0
+        }
+    },
+    {
+        "CmdCount": 7,
+        "Guid": "5F99C1642A2F4e03850721B4F5D7C3F8",
+        "Key": "EThread",
+        "MaxRefConstPos": 0,
+        "MaxRefObjectPos": 0,
+        "Name": "多线程支持库",
+        "Version": {
+            "Major": 2,
+            "Minor": 0
+        }
+    }
+]

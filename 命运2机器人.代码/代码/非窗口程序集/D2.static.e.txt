@@ -1,0 +1,907 @@
+﻿.版本 2
+.支持库 CommonSupport
+.支持库 e2ee
+.支持库 spec
+
+.程序集 D2
+.子程序 raid_report
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .参数 ID, 文本型
+    .局部变量 程序位置, 文本型
+    .局部变量 JS位置, 文本型
+    .局部变量 JS位置E, 文本型
+    .局部变量 图片位置, 文本型
+    .局部变量 图片位置E, 文本型
+    .局部变量 mid, 文本型
+    .局部变量 正则, 正则表达式类
+
+    .判断开始 (type ＝ “1”)
+        日志 (“突袭 | 线程启动 ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“突袭 | 线程启动 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    程序位置 ＝ #引号 ＋ 缓存目录 ＋ “node.exe” ＋ #引号
+    JS位置 ＝ #引号 ＋ 缓存目录 ＋ Q号 ＋ “.js” ＋ #引号
+    JS位置E ＝ 缓存目录 ＋ Q号 ＋ “.js”
+    图片位置E ＝ 缓存目录 ＋ Q号 ＋ “.png”
+    图片位置 ＝ 子文本替换 (图片位置E, “\”, “\\”, , , 真)
+    
+    .判断开始 (文件是否存在 (JS位置E) ＝ 真)
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “不要着急嘛~~~要不打个手枪?”, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “不要着急嘛~~~要不打个手枪?”, 假)
+        .判断结束
+        
+    .默认
+        正则.创建 (“(46\d+)|(7656\d+)|0”, ID)
+        .判断开始 (ID ＝ 正则.取子匹配文本 (1, 2))
+            .判断开始 (type ＝ “1”)
+                日志 (“突袭 | 使用SteamID获取 ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“突袭 | 使用SteamID获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            mid ＝ SteamIDToMembershipId (ID)
+            
+        .判断 (ID ＝ 正则.取子匹配文本 (1, 1))
+            .判断开始 (type ＝ “1”)
+                日志 (“突袭 | 使用游戏编号获取 ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“突袭 | 使用游戏编号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            mid ＝ ID
+            
+        .判断 (ID ＝ “0”)
+            .判断开始 (type ＝ “1”)
+                日志 (“突袭 | 绑定账号获取 ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“突袭 | 绑定账号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            绑定许可证.进入 ()
+            mid ＝ 绑定DB.取文本 (“//” ＋ Q号 ＋ “.membershipId”)
+            绑定许可证.退出 ()
+        .默认
+            
+        .判断结束
+        
+        .判断开始 (启用代理)
+            写到文件 (JS位置E, 编码_Ansi到Utf8 (文本_替换 (#截图js_代理, , , , “$1”, “https://raid.report/pc/” ＋ mid, “$2”, 图片位置, “$3”, 读配置项 (配置文件, “D2”, “HTTP代理”, ))))
+        .默认
+            写到文件 (JS位置E, 编码_Ansi到Utf8 (文本_替换 (#截图js, , , , “$1”, “https://raid.report/pc/” ＋ mid, “$2”, 图片位置)))
+        .判断结束
+        
+        启动线程_任意文本参 (&截图, 程序位置, JS位置, JS位置E, 图片位置E, type, Q号, 群号)
+        
+    .判断结束
+    
+
+.子程序 dungeon_report
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .参数 ID, 文本型
+    .局部变量 程序位置, 文本型
+    .局部变量 JS位置, 文本型
+    .局部变量 JS位置E, 文本型
+    .局部变量 图片位置, 文本型
+    .局部变量 图片位置E, 文本型
+    .局部变量 mid, 文本型
+    .局部变量 正则, 正则表达式类
+
+    .判断开始 (type ＝ “1”)
+        日志 (“地牢 | 线程启动 ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“地牢 | 线程启动 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    程序位置 ＝ #引号 ＋ 缓存目录 ＋ “node.exe” ＋ #引号
+    JS位置 ＝ #引号 ＋ 缓存目录 ＋ Q号 ＋ “.js” ＋ #引号
+    JS位置E ＝ 缓存目录 ＋ Q号 ＋ “.js”
+    图片位置E ＝ 缓存目录 ＋ Q号 ＋ “.png”
+    图片位置 ＝ 子文本替换 (图片位置E, “\”, “\\”, , , 真)
+    
+    .判断开始 (文件是否存在 (JS位置E) ＝ 真)
+        
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “不要着急嘛~~~要不打个手枪?”, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “不要着急嘛~~~要不打个手枪?”, 假)
+        .判断结束
+        
+    .默认
+        正则.创建 (“(46\d+)|(7656\d+)|0”, ID)
+        .判断开始 (ID ＝ 正则.取子匹配文本 (1, 2))
+            .判断开始 (type ＝ “1”)
+                日志 (“地牢 | 使用SteamID获取 ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“地牢 | 使用SteamID获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            mid ＝ SteamIDToMembershipId (ID)
+            
+        .判断 (ID ＝ 正则.取子匹配文本 (1, 1))
+            .判断开始 (type ＝ “1”)
+                日志 (“地牢 | 使用游戏编号获取 ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“地牢 | 使用游戏编号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            mid ＝ ID
+            
+        .判断 (ID ＝ “0”)
+            .判断开始 (type ＝ “1”)
+                日志 (“地牢 | 绑定账号获取 ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“地牢 | 绑定账号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            绑定许可证.进入 ()
+            mid ＝ 绑定DB.取文本 (“//” ＋ Q号 ＋ “.membershipId”)
+            绑定许可证.退出 ()
+        .默认
+            
+        .判断结束
+        
+        .判断开始 (启用代理)
+            写到文件 (JS位置E, 编码_Ansi到Utf8 (文本_替换 (#截图js_代理, , , , “$1”, “https://dungeon.report/pc/” ＋ mid, “$2”, 图片位置, “$3”, 读配置项 (配置文件, “D2”, “HTTP代理”, ))))
+        .默认
+            写到文件 (JS位置E, 编码_Ansi到Utf8 (文本_替换 (#截图js, , , , “$1”, “https://dungeon.report/pc/” ＋ mid, “$2”, 图片位置)))
+        .判断结束
+        
+        启动线程_任意文本参 (&截图, 程序位置, JS位置, JS位置E, 图片位置E, type, Q号, 群号)
+        
+    .判断结束
+    
+
+.子程序 截图
+    .参数 程序位置, 文本型
+    .参数 JS位置, 文本型
+    .参数 JS位置E, 文本型
+    .参数 图片位置E, 文本型
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .局部变量 pipe, 匿名管道
+    .局部变量 a, 字节型
+    .局部变量 b, 字节型
+    .局部变量 c, 字节型
+    .局部变量 d, 整数型
+    .局部变量 状态, 整数型
+
+    .判断开始 (type ＝ “1”)
+        日志 (“截图 | 线程启动 [” ＋ 程序位置 ＋ “ ” ＋ JS位置 ＋ “]: ” ＋ 到文本 (pipe.执行进程 (程序位置 ＋ “ ” ＋ JS位置)) ＋ “ ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“截图 | 线程启动 [” ＋ 程序位置 ＋ “ ” ＋ JS位置 ＋ “]: ” ＋ 到文本 (pipe.执行进程 (程序位置 ＋ “ ” ＋ JS位置)) ＋ “ ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    b ＝ 取字节集数据 (取字节集左边 (到字节集 (49), 1), #字节型, 1)
+    c ＝ 取字节集数据 (取字节集左边 (到字节集 (48), 1), #字节型, 1)
+    
+    .判断循环首 (真)
+        a ＝ 取字节集数据 (取字节集左边 (pipe.读入数据2 (), 1), #字节型, 1)
+        
+        d ＝ d ＋ 1
+        .如果真 (d ＝ 30000)
+            .判断开始 (type ＝ “1”)
+                日志 (“截图 | 超时 ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“截图 | 超时 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            
+            pipe.终止进程 ()
+            跳出循环 ()
+        .如果真结束
+        
+        .判断开始 (a ＝ c)
+            .判断开始 (type ＝ “1”)
+                日志 (“截图 | 状态: ” ＋ 到文本 (a ＝ c) ＋ “ ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“截图 | 状态: ” ＋ 到文本 (a ＝ c) ＋ “ ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            
+            状态 ＝ 0
+            pipe.终止进程 ()
+            跳出循环 ()
+            
+        .判断 (a ＝ b)
+            .判断开始 (type ＝ “1”)
+                日志 (“截图 | 状态: ” ＋ 到文本 (a ＝ b) ＋ “ ( ” ＋ Q号 ＋ “ )”)
+            .默认
+                日志 (“截图 | 状态: ” ＋ 到文本 (a ＝ b) ＋ “ ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+            .判断结束
+            
+            状态 ＝ 1
+            跳出循环 ()
+            
+        .默认
+            
+        .判断结束
+        
+        程序_延时 (1, 0)
+    .判断循环尾 ()
+    
+    .判断循环首 (真)
+        
+        .如果真 (pipe.是否执行中 () ＝ 假)
+            跳出循环 ()
+        .如果真结束
+        
+    .判断循环尾 ()
+    
+    .判断开始 (状态 ＝ 0)
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “截图 | 获取失败”, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “截图 | 获取失败”, 假)
+        .判断结束
+        
+    .判断 (type ＝ “1”)
+        CQ.发送私聊消息 (Q号, CQ.Image (“file:///” ＋ 图片位置E), 假)
+    .默认
+        CQ.发送群消息 (群号, CQ.At (Q号) ＋ CQ.Image (“file:///” ＋ 图片位置E), 假)
+    .判断结束
+    
+    程序_延时 (2, 1)
+    文件_删除 (图片位置E)
+    文件_删除 (JS位置E)
+    
+
+.子程序 GetMembershipFromHardLinkedCredential
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .参数 SteamID, 文本型
+    .局部变量 Bungie, 类_Bungie
+    .局部变量 data, 存取键值表
+    .局部变量 tmp, 文本型
+    .局部变量 Response, 文本型
+
+    .判断开始 (type ＝ “1”)
+        日志 (“Steam搜索 | 线程启动 ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“Steam搜索 | 线程启动 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    Bungie.置秘钥 (读配置项 (配置文件, “D2”, “X-API-KEY”, ))
+    .如果真 (启用代理)
+        Bungie.置代理 (读配置项 (配置文件, “D2”, “HTTP代理”, ))
+    .如果真结束
+    
+    Response ＝ Bungie.User_GetMembershipFromHardLinkedCredential (SteamID)
+    .判断开始 (data.从JSON载入 (Response, , ))
+        
+        tmp ＝ “平台: STEAM | 游戏编号: ” ＋ data.取文本 (“//membershipId”)
+        
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, tmp, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ tmp, 假)
+        .判断结束
+        
+        
+    .判断 (type ＝ “1”)
+        CQ.发送私聊消息 (Q号, Response, 假)
+    .默认
+        CQ.发送群消息 (群号, CQ.At (Q号) ＋ Response, 假)
+    .判断结束
+    
+
+.子程序 historicalstat
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .参数 ID, 文本型
+    .局部变量 tmp, 文本型
+    .局部变量 图片, 文本型
+    .局部变量 Bungie, 类_Bungie
+    .局部变量 Response, 文本型
+    .局部变量 data, 存取键值表
+    .局部变量 MembershipType, 文本型
+    .局部变量 membershipId, 文本型
+    .局部变量 infotmp, 文本型
+    .局部变量 info, 文本型, , "0"
+    .局部变量 昵称, 文本型
+    .局部变量 正则, 正则表达式类
+    .局部变量 a, 文本型
+    .局部变量 b, 文本型, , "0"
+    .局部变量 hb, 内存画板
+
+    .判断开始 (type ＝ “1”)
+        日志 (“统计 | 线程启动 ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“统计 | 线程启动 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    tmp ＝ 缓存目录 ＋ Q号 ＋ “.tmp”
+    图片 ＝ 缓存目录 ＋ Q号 ＋ “.png”
+    .如果真 (文件是否存在 (tmp) ＝ 真)
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “不要着急嘛~~~要不打个手枪?”, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “不要着急嘛~~~要不打个手枪?”, 假)
+        .判断结束
+        返回 ()
+    .如果真结束
+    
+    写到文件 (tmp, { })
+    
+    Bungie.置秘钥 (读配置项 (配置文件, “D2”, “X-API-KEY”, ))
+    .如果真 (启用代理)
+        Bungie.置代理 (读配置项 (配置文件, “D2”, “HTTP代理”, ))
+    .如果真结束
+    
+    正则.创建 (“(46\d+)|(7656\d+)|0”, ID)
+    .判断开始 (ID ＝ 正则.取子匹配文本 (1, 2))
+        .判断开始 (type ＝ “1”)
+            日志 (“统计 | 使用SteamID获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“统计 | 使用SteamID获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        Response ＝ Bungie.User_GetMembershipDataById (SteamIDToMembershipId (ID), “-1”)
+        
+    .判断 (ID ＝ 正则.取子匹配文本 (1, 1))
+        .判断开始 (type ＝ “1”)
+            日志 (“统计 | 使用游戏编号获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“统计 | 使用游戏编号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        Response ＝ Bungie.User_GetMembershipDataById (ID, “-1”)
+        
+    .判断 (ID ＝ “0”)
+        .判断开始 (type ＝ “1”)
+            日志 (“统计 | 绑定账号获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“统计 | 绑定账号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        绑定许可证.进入 ()
+        Response ＝ Bungie.User_GetMembershipDataById (绑定DB.取文本 (“//” ＋ Q号 ＋ “.membershipId”), “-1”)
+        绑定许可证.退出 ()
+    .默认
+        
+    .判断结束
+    
+    .判断开始 (data.从JSON载入 (Response, , , ))
+        .判断开始 (data.取数量 (“//destinyMemberships”) ＝ 1)
+            MembershipType ＝ data.取文本 (“//destinyMemberships[1].membershipType”)
+            
+        .默认
+            MembershipType ＝ data.取文本 (“//destinyMemberships[1].crossSaveOverride”)
+        .判断结束
+        
+        membershipId ＝ data.取文本 (“//destinyMemberships[1].membershipId”)
+        昵称 ＝ data.取文本 (“//destinyMemberships[1].displayName”)
+        
+        Response ＝ Bungie.Destiny2_GetHistoricalStatsForAccount (MembershipType, membershipId)
+        .判断开始 (data.从JSON载入 (Response, , ))
+            
+            infotmp ＝ “活动进入: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.activitiesEntered.basic.displayValue”) ＋ “|活动完成: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.activitiesCleared.basic.displayValue”) ＋ “|活动完成率: ” ＋ D2_计算百分比 (data.取文本 (“//mergedAllCharacters.merged.allTime.activitiesEntered.basic.displayValue”), data.取文本 (“//mergedAllCharacters.merged.allTime.activitiesCleared.basic.displayValue”)) ＋ “|公共事件完成数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.publicEventsCompleted.basic.displayValue”) ＋ “|英雄公共完成数:” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.heroicPublicEventsCompleted.basic.displayValue”) ＋ “|目标完成数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.objectivesCompleted.basic.displayValue”)
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “击杀数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.kills.basic.displayValue”) ＋ “|死亡数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.deaths.basic.displayValue”) ＋ “|助攻数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.assists.basic.displayValue”) ＋ “|击杀\死亡: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.killsDeathsRatio.basic.displayValue”) ＋ “|击杀\死亡\助攻: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.killsDeathsAssists.basic.displayValue”) ＋ “|效率: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.efficiency.basic.displayValue”)
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “最多单场击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.bestSingleGameKills.basic.displayValue”) ＋ “|精准击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.precisionKills.basic.displayValue”) ＋ “|最多单场精准击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.mostPrecisionKills.basic.displayValue”) ＋ “|最远击杀距离: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.longestKillDistance.basic.displayValue”) ＋ “|平均击杀距离: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.averageKillDistance.basic.displayValue”) ＋ “|总击杀距离: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.totalKillDistance.basic.displayValue”)
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “自杀次数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.suicides.basic.displayValue”) ＋ “|复活次数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.resurrectionsPerformed.basic.displayValue”) ＋ “|被复活次数: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.resurrectionsReceived.basic.displayValue”) ＋ “|最长单场存活时间: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.longestSingleLife.basic.displayValue”) ＋ “|场均存活时间: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.averageLifespan.basic.displayValue”) ＋ “| \\\\”
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “生成光球: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.orbsDropped.basic.displayValue”) ＋ “|拾取光球: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.orbsGathered.basic.displayValue”) ＋ “|最高光等: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.highestLightLevel.basic.displayValue”) ＋ “|游戏时间: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.secondsPlayed.basic.displayValue”) ＋ “| \\\\| \\\\”
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “自动步枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsAutoRifle.basic.displayValue”) ＋ “|斥候步枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsScoutRifle.basic.displayValue”) ＋ “|脉冲步枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsPulseRifle.basic.displayValue”) ＋ “|融合步枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsFusionRifle.basic.displayValue”) ＋ “|线性融合步枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsBeamRifle.basic.displayValue”) ＋ “|追踪步枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsTraceRifle.basic.displayValue”)
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “圣物击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsRelic.basic.displayValue”) ＋ “|弓击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsBow.basic.displayValue”) ＋ “|刀剑击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsSword.basic.displayValue”) ＋ “|手炮击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsHandCannon.basic.displayValue”) ＋ “|手枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsSideArm.basic.displayValue”) ＋ “|机枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsMachineGun.basic.displayValue”)
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “冲锋枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsSubmachinegun.basic.displayValue”) ＋ “|霰弹枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsShotgun.basic.displayValue”) ＋ “|狙击枪击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsSniper.basic.displayValue”) ＋ “|榴弹发射器击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsGrenadeLauncher.basic.displayValue”) ＋ “|火箭发射器击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsRocketLauncher.basic.displayValue”) ＋ “|  \\\\”
+            加入成员 (info, infotmp)
+            
+            infotmp ＝ “手雷击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsGrenade.basic.displayValue”) ＋ “|近战击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsMelee.basic.displayValue”) ＋ “|职业技能击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsAbility.basic.displayValue”) ＋ “|超能击杀: ” ＋ data.取文本 (“//mergedAllCharacters.merged.allTime.weaponKillsSuper.basic.displayValue”) ＋ “|  \\\\|  \\\\”
+            加入成员 (info, infotmp)
+            
+            a ＝ 文本制表_表头_表脚 (9, 6, info, “\  ” ＋ 昵称 ＋ “  \”, “\  所有角色数据统计  \”)
+            b ＝ 分割文本 (a, #换行符, )
+            
+            hb.创建 (1, 1, #白色, )
+            hb.字体属性 (“等距更纱黑体 SC”, 18, , , , , , , )
+            hb.置画板尺寸 (hb.取文本宽度 (b [1]), hb.取文本高度 (a) × 取数组成员数 (b))
+            hb.置写出位置 (0, 0, )
+            hb.写出 (a)
+            写到文件 (图片, 图片_转换1 (hb.取图片 (), 5, 100))
+            hb.销毁 ()
+            
+            .判断开始 (type ＝ “1”)
+                CQ.发送私聊消息 (Q号, CQ.Image (“file:///” ＋ 图片), 假)
+            .默认
+                CQ.发送群消息 (群号, CQ.At (Q号) ＋ CQ.Image (“file:///” ＋ 图片), 假)
+            .判断结束
+            
+        .判断 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “GetHistoricalStatsForAccount: ” ＋ Response, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “GetHistoricalStatsForAccount: ” ＋ Response, 假)
+        .判断结束
+        
+    .判断 (type ＝ “1”)
+        CQ.发送私聊消息 (Q号, “GetMembershipDataById: ” ＋ Response, 假)
+    .默认
+        CQ.发送群消息 (群号, CQ.At (Q号) ＋ “GetMembershipDataById: ” ＋ Response, 假)
+    .判断结束
+    
+    程序_延时 (2, 1)
+    文件_删除 (tmp)
+    
+
+.子程序 GetProfile
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .参数 ID, 文本型
+    .局部变量 tmp, 文本型
+    .局部变量 图片, 文本型
+    .局部变量 Bungie, 类_Bungie
+    .局部变量 Response, 文本型
+    .局部变量 data, 存取键值表
+    .局部变量 MembershipType, 文本型
+    .局部变量 membershipId, 文本型
+    .局部变量 info, 存取键值表
+    .局部变量 characters, 文本型, , "0"
+    .局部变量 i, 整数型
+    .局部变量 Profile, 账户信息, , "0"
+    .局部变量 Profiletmp, 账户信息
+    .局部变量 body, 文本型, , "0"
+    .局部变量 bodytmp, 文本型
+    .局部变量 昵称, 文本型
+    .局部变量 正则, 正则表达式类
+    .局部变量 a, 文本型
+    .局部变量 b, 文本型, , "0"
+    .局部变量 hb, 内存画板
+    .局部变量 tpobj, 图片对象
+    .局部变量 h, 字节集
+    .局部变量 hbh, 整数型
+    .局部变量 writhh, 整数型
+    .局部变量 原色, 整数型
+    .局部变量 原宽, 整数型
+
+    .判断开始 (type ＝ “1”)
+        日志 (“角色 | 线程启动 ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“角色 | 线程启动 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    tmp ＝ 缓存目录 ＋ Q号 ＋ “.tmp”
+    图片 ＝ 缓存目录 ＋ Q号 ＋ “.png”
+    .如果真 (文件是否存在 (tmp) ＝ 真)
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “不要着急嘛~~~要不打个手枪?”, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “不要着急嘛~~~要不打个手枪?”, 假)
+        .判断结束
+        返回 ()
+    .如果真结束
+    
+    写到文件 (tmp, { })
+    
+    Bungie.置秘钥 (读配置项 (配置文件, “D2”, “X-API-KEY”, ))
+    .如果真 (启用代理)
+        Bungie.置代理 (读配置项 (配置文件, “D2”, “HTTP代理”, ))
+    .如果真结束
+    
+    
+    正则.创建 (“(46\d+)|(7656\d+)|0”, ID)
+    .判断开始 (ID ＝ 正则.取子匹配文本 (1, 2))
+        .判断开始 (type ＝ “1”)
+            日志 (“角色 | 使用SteamID获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“角色 | 使用SteamID获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        Response ＝ Bungie.User_GetMembershipDataById (SteamIDToMembershipId (ID), “-1”)
+        
+    .判断 (ID ＝ 正则.取子匹配文本 (1, 1))
+        .判断开始 (type ＝ “1”)
+            日志 (“角色 | 使用游戏编号获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“角色 | 使用游戏编号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        Response ＝ Bungie.User_GetMembershipDataById (ID, “-1”)
+        
+    .判断 (ID ＝ “0”)
+        .判断开始 (type ＝ “1”)
+            日志 (“角色 | 绑定账号获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“角色 | 绑定账号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        绑定许可证.进入 ()
+        Response ＝ Bungie.User_GetMembershipDataById (绑定DB.取文本 (“//” ＋ Q号 ＋ “.membershipId”), “-1”)
+        绑定许可证.退出 ()
+    .默认
+        
+    .判断结束
+    
+    .判断开始 (data.从JSON载入 (Response, , ))
+        .判断开始 (data.取数量 (“//destinyMemberships”) ＝ 1)
+            MembershipType ＝ data.取文本 (“//destinyMemberships[1].membershipType”)
+            
+        .默认
+            MembershipType ＝ data.取文本 (“//destinyMemberships[1].crossSaveOverride”)
+        .判断结束
+        
+        membershipId ＝ data.取文本 (“//destinyMemberships[1].membershipId”)
+        昵称 ＝ data.取文本 (“//destinyMemberships[1].displayName”)
+        
+        Response ＝ Bungie.Destiny2_GetProfile (MembershipType, membershipId, “200”)
+        .判断开始 (data.从JSON载入 (Response, , ))
+            data.取键值表 (“//characters.data”, info)
+            characters ＝ info.取键数组 ()
+            
+            .计次循环首 (取数组成员数 (characters), i)
+                
+                Profiletmp.emblemBackgroundPath ＝ “https://www.bungie.net/” ＋ info.取文本 (“//” ＋ characters [i] ＋ “.emblemBackgroundPath”)
+                Profiletmp.dateLastPlayed ＝ D2_JSON转北京时间 (info.取文本 (“//” ＋ characters [i] ＋ “.dateLastPlayed”))
+                Profiletmp.minutesPlayedTotal ＝ D2_分钟转时间 (info.取整数 (“//” ＋ characters [i] ＋ “.minutesPlayedTotal”))
+                Profiletmp.light ＝ info.取文本 (“//” ＋ characters [i] ＋ “.light”)
+                Profiletmp.classType ＝ Bungie.classType转文本 (info.取文本 (“//” ＋ characters [i] ＋ “.classType”))
+                Profiletmp.敏捷 ＝ info.取文本 (“//” ＋ characters [i] ＋ “.stats.2996146975”)
+                Profiletmp.韧性 ＝ info.取文本 (“//” ＋ characters [i] ＋ “.stats.392767087”)
+                Profiletmp.恢复 ＝ info.取文本 (“//” ＋ characters [i] ＋ “.stats.1943323491”)
+                Profiletmp.纪律 ＝ info.取文本 (“//” ＋ characters [i] ＋ “.stats.1735777505”)
+                Profiletmp.智慧 ＝ info.取文本 (“//” ＋ characters [i] ＋ “.stats.144602215”)
+                Profiletmp.力量 ＝ info.取文本 (“//” ＋ characters [i] ＋ “.stats.4244567218”)
+                加入成员 (Profile, Profiletmp)
+                
+            .计次循环尾 ()
+            
+            hb.创建 (1, 1, , )
+            hb.背景填充模式 (真)
+            hb.文本颜色 (#白色)
+            hb.字体属性 (“等距更纱黑体 SC”, 18, , , , , , , )
+            
+            .计次循环首 (取数组成员数 (Profile), i)
+                
+                .判断开始 (启用代理)
+                    h ＝ 网页_访问_对象 (Profile [i].emblemBackgroundPath, 0, , , , , , , , , 读配置项 (配置文件, “D2”, “HTTP代理”, ))
+                .默认
+                    h ＝ 网页_访问_对象 (Profile [i].emblemBackgroundPath, 0)
+                .判断结束
+                tpobj.加载数据 (h)
+                tpobj.亮度对比度 (-100, 10)
+                
+                清除数组 (body)
+                bodytmp ＝ “光等: ” ＋ Profile [i].light ＋ “|游戏时间: ” ＋ Profile [i].minutesPlayedTotal ＋ “|最后在线时间: ” ＋ Profile [i].dateLastPlayed
+                加入成员 (body, bodytmp)
+                bodytmp ＝ “敏捷: ” ＋ Profile [i].敏捷 ＋ “|韧性: ” ＋ Profile [i].韧性 ＋ “|恢复: ” ＋ Profile [i].恢复
+                加入成员 (body, bodytmp)
+                bodytmp ＝ “纪律: ” ＋ Profile [i].纪律 ＋ “|智慧: ” ＋ Profile [i].智慧 ＋ “|力量: ” ＋ Profile [i].力量
+                加入成员 (body, bodytmp)
+                
+                a ＝ 文本制表_表头 (3, 3, body, Profile [i].classType)
+                b ＝ 分割文本 (a, #换行符, )
+                
+                hbh ＝ hbh ＋ hb.取文本高度 (a) × 取数组成员数 (b)
+                调试输出 (hbh, writhh)
+                hb.置画板尺寸 (hb.取文本宽度 (b [1]), hbh)
+                hb.画图片 (hb.载入图片数据 (tpobj.取出图片数据 (0)), 0, writhh, hb.取文本宽度 (b [1]), hb.取文本高度 (a) × 取数组成员数 (b), )
+                hb.卸载图片 ()
+                
+                hb.开始绘制路径 ()
+                hb.定位写出 (0, writhh, a)
+                hb.停止绘制路径 ()
+                原宽 ＝ hb.画笔粗细 (3)
+                原色 ＝ hb.画笔颜色 (#黑色)
+                hb.描绘路径 ()
+                
+                hb.画笔粗细 (原宽)
+                hb.画笔颜色 (原色)
+                hb.定位写出 (0, writhh, a)
+                writhh ＝ writhh ＋ hb.取文本高度 (a) × 取数组成员数 (b)
+                
+            .计次循环尾 ()
+            tpobj.加载数据 (hb.取图片 ())
+            tpobj.亮度对比度 (20, 10)
+            
+            写到文件 (图片, tpobj.取出图片数据 (0))
+            hb.销毁 ()
+            tpobj.释放 ()
+            
+            .判断开始 (type ＝ “1”)
+                CQ.发送私聊消息 (Q号, CQ.Image (“file:///” ＋ 图片), 假)
+            .默认
+                CQ.发送群消息 (群号, CQ.At (Q号) ＋ CQ.Image (“file:///” ＋ 图片), 假)
+            .判断结束
+            
+        .判断 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “GetProfile: ” ＋ Response, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “GetProfile: ” ＋ Response, 假)
+        .判断结束
+        
+    .判断 (type ＝ “1”)
+        CQ.发送私聊消息 (Q号, “GetMembershipDataById: ” ＋ Response, 假)
+    .默认
+        CQ.发送群消息 (群号, CQ.At (Q号) ＋ “GetMembershipDataById: ” ＋ Response, 假)
+    .判断结束
+    
+    程序_延时 (2, 1)
+    文件_删除 (tmp)
+    
+
+.子程序 elo
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .参数 ID, 文本型
+    .局部变量 tmp, 文本型
+    .局部变量 图片, 文本型
+    .局部变量 Response, 字节集
+    .局部变量 data, 存取键值表
+    .局部变量 h, 字节集
+    .局部变量 hh, 文本型
+    .局部变量 t, 文本型
+    .局部变量 i, 整数型
+    .局部变量 活动, 文本型
+    .局部变量 分数, 文本型
+    .局部变量 段位, 文本型
+    .局部变量 排名, 文本型
+    .局部变量 Body, 文本型, , "0"
+    .局部变量 正则, 正则表达式类
+    .局部变量 a, 文本型
+    .局部变量 b, 文本型, , "0"
+    .局部变量 hb, 内存画板
+
+    .判断开始 (type ＝ “1”)
+        日志 (“ELO | 线程启动 ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“ELO | 线程启动 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    tmp ＝ 缓存目录 ＋ Q号 ＋ “.tmp”
+    图片 ＝ 缓存目录 ＋ Q号 ＋ “.png”
+    .如果真 (文件是否存在 (tmp) ＝ 真)
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, “不要着急嘛~~~要不打个手枪?”, 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ “不要着急嘛~~~要不打个手枪?”, 假)
+        .判断结束
+        返回 ()
+    .如果真结束
+    
+    写到文件 (tmp, { })
+    
+    正则.创建 (“(46\d+)|(7656\d+)|0”, ID)
+    .判断开始 (ID ＝ 正则.取子匹配文本 (1, 2))
+        .判断开始 (type ＝ “1”)
+            日志 (“ELO | 使用SteamID获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“ELO | 使用SteamID获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        
+        .判断开始 (启用代理)
+            Response ＝ 网页_访问_对象 (“https://api.tracker.gg/api/v2/destiny-2/standard/profile/steam/” ＋ SteamIDToMembershipId (ID), 0, , , , #协议头, , , , , 读配置项 (配置文件, “D2”, “HTTP代理”, ))
+        .默认
+            Response ＝ 网页_访问_对象 (“https://api.tracker.gg/api/v2/destiny-2/standard/profile/steam/” ＋ SteamIDToMembershipId (ID), 0, , , , #协议头)
+        .判断结束
+        
+    .判断 (ID ＝ 正则.取子匹配文本 (1, 1))
+        .判断开始 (type ＝ “1”)
+            日志 (“ELO | 使用游戏编号获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“ELO | 使用游戏编号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        
+        .判断开始 (启用代理)
+            Response ＝ 网页_访问_对象 (“https://api.tracker.gg/api/v2/destiny-2/standard/profile/steam/” ＋ ID, 0, , , , #协议头, , , , , 读配置项 (配置文件, “D2”, “HTTP代理”, ))
+        .默认
+            Response ＝ 网页_访问_对象 (“https://api.tracker.gg/api/v2/destiny-2/standard/profile/steam/” ＋ ID, 0, , , , #协议头)
+        .判断结束
+        
+    .判断 (ID ＝ “0”)
+        .判断开始 (type ＝ “1”)
+            日志 (“ELO | 绑定账号获取 ( ” ＋ Q号 ＋ “ )”)
+        .默认
+            日志 (“ELO | 绑定账号获取 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+        .判断结束
+        
+        绑定许可证.进入 ()
+        .判断开始 (启用代理)
+            Response ＝ 网页_访问_对象 (“https://api.tracker.gg/api/v2/destiny-2/standard/profile/steam/” ＋ 绑定DB.取文本 (“//” ＋ Q号 ＋ “.membershipId”), 0, , , , #协议头, , , , , 读配置项 (配置文件, “D2”, “HTTP代理”, ))
+        .默认
+            Response ＝ 网页_访问_对象 (“https://api.tracker.gg/api/v2/destiny-2/standard/profile/steam/” ＋ 绑定DB.取文本 (“//” ＋ Q号 ＋ “.membershipId”), 0, , , , #协议头)
+        .判断结束
+        
+        绑定许可证.退出 ()
+    .默认
+        
+    .判断结束
+    
+    .判断开始 (data.从JSON载入 (Response, #文本编码格式_UTF8, , ))
+        
+        .判断开始 (data.取文本 (“//errors[1].message”) ＝ “”)
+            h ＝ 网页_访问_对象 (data.取文本 (“//data.platformInfo.avatarUrl”), 0)
+            hh ＝ data.取文本 (“//data.platformInfo.platformUserHandle”)
+            t ＝ 时间_到文本 (时间_JSON转为时间 (data.取文本 (“//data.metadata.lastUpdated.value”)), 1, , 2)
+            
+            
+            .计次循环首 (data.取数量 (“//data.segments”), i)
+                活动 ＝ D2_PVP活动翻译 (data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].metadata.name”))
+                .判断开始 (活动 ＝ “Lifetime” 或 活动 ＝ “Competitive PvP” 或 活动 ＝ “Quickplay PvP” 或 活动 ＝ “Competitive Co-Op” 或 活动 ＝ “PVE Overall”)
+                    到循环尾 ()
+                    
+                .默认
+                    .如果真 (data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo”) ＝ “”)
+                        到循环尾 ()
+                    .如果真结束
+                    
+                    分数 ＝ “分数: ” ＋ data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.displayValue”)
+                    段位 ＝ “段位: ” ＋ data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.metadata.rankName”)
+                    排名 ＝ “排名: ” ＋ data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.rank”) ＋ “ (” ＋ D2_前百分比 (data.取双精度小数 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.percentile”)) ＋ “)”
+                    
+                    加入成员 (Body, 活动 ＋ “|” ＋ 分数 ＋ “|” ＋ 段位 ＋ “|” ＋ 排名)
+                    
+                .判断结束
+                
+            .计次循环尾 ()
+            
+            .判断开始 (取数组成员数 (Body) ＝ 0)
+                .判断开始 (type ＝ “1”)
+                    CQ.发送私聊消息 (Q号, “暂无数据！”, 假)
+                .默认
+                    CQ.发送群消息 (群号, CQ.At (Q号) ＋ “暂无数据！”, 假)
+                .判断结束
+                
+            .默认
+                a ＝ 文本制表_表脚 (取数组成员数 (Body), 4, Body, t)
+                b ＝ 分割文本 (a, #换行符, )
+                
+                hb.创建 (1, 1, #白色, )
+                hb.字体属性 (“等距更纱黑体 SC”, 18, , , , , , , )
+                hb.置画板尺寸 (hb.取文本宽度 (b [1]), hb.取文本高度 (a) × 取数组成员数 (b) ＋ 50)
+                hb.画图片 (hb.载入图片数据 (h), 10, 10, 40, 40, )
+                hb.卸载图片 ()
+                hb.置写出位置 (64, 16, )
+                hb.写出 (hh ＋ “ 等级分”)
+                hb.置写出位置 (0, 50, )
+                hb.写出 (a)
+                写到文件 (图片, 图片_转换1 (hb.取图片 (), 5, 100))
+                hb.销毁 ()
+                
+                .判断开始 (type ＝ “1”)
+                    CQ.发送私聊消息 (Q号, CQ.Image (“file:///” ＋ 图片), 假)
+                .默认
+                    CQ.发送群消息 (群号, CQ.At (Q号) ＋ CQ.Image (“file:///” ＋ 图片), 假)
+                .判断结束
+                
+            .判断结束
+            
+        .判断 (type ＝ “1”)
+            CQ.发送私聊消息 (Q号, data.取文本 (“//errors[1].message”), 假)
+        .默认
+            CQ.发送群消息 (群号, CQ.At (Q号) ＋ data.取文本 (“//errors[1].message”), 假)
+        .判断结束
+        
+    .判断 (type ＝ “1”)
+        CQ.发送私聊消息 (Q号, “API相应超时”, 假)
+    .默认
+        CQ.发送群消息 (群号, CQ.At (Q号) ＋ “API相应超时”, 假)
+    .判断结束
+    
+    程序_延时 (2, 1)
+    文件_删除 (tmp)
+    
+
+.子程序 SteamIDToMembershipId, 文本型
+    .参数 SteamID, 文本型
+    .局部变量 Bungie, 类_Bungie
+    .局部变量 Response, 文本型
+    .局部变量 data, 存取键值表
+
+    Bungie.置秘钥 (读配置项 (配置文件, “D2”, “X-API-KEY”, ))
+    .如果真 (启用代理)
+        Bungie.置代理 (读配置项 (配置文件, “D2”, “HTTP代理”, ))
+    .如果真结束
+    
+    Response ＝ Bungie.User_GetMembershipFromHardLinkedCredential (SteamID)
+    .判断开始 (data.从JSON载入 (Response, , , ))
+        返回 (data.取文本 (“//membershipId”))
+    .默认
+        返回 (“”)
+    .判断结束
+    
+
+.子程序 SearchDestinyPlayer
+    .参数 type, 文本型
+    .参数 Q号, 文本型
+    .参数 群号, 文本型
+    .参数 name, 文本型
+    .局部变量 Bungie, 类_Bungie
+    .局部变量 data, 存取列表
+    .局部变量 计次, 整数型
+    .局部变量 head, 文本型
+    .局部变量 body, 文本型
+    .局部变量 tmp, 文本型
+    .局部变量 Response, 文本型
+
+    .判断开始 (type ＝ “1”)
+        日志 (“搜索 | 线程启动 ( ” ＋ Q号 ＋ “ )”)
+    .默认
+        日志 (“搜索 | 线程启动 ( ” ＋ 群号 ＋ “ | ” ＋ Q号 ＋ “ )”)
+    .判断结束
+    
+    Bungie.置秘钥 (读配置项 (配置文件, “D2”, “X-API-KEY”, ))
+    .如果真 (启用代理)
+        Bungie.置代理 (读配置项 (配置文件, “D2”, “HTTP代理”, ))
+    .如果真结束
+    
+    Response ＝ Bungie.Destiny2_SearchDestinyPlayer (“-1”, name)
+    .判断开始 (data.从JSON载入 (Response, , ))
+        .判断开始 (data.取数量 () ≠ 0 且 data.取数量 () ＜ 3)
+            head ＝ “==========共有 ” ＋ 到文本 (data.取数量 ()) ＋ “ 个结果==========” ＋ #换行符
+            .计次循环首 (data.取数量 (), 计次)
+                .判断开始 (data.取整数 (“//[” ＋ 到文本 (计次) ＋ “].membershipType”) ＝ 1)
+                    tmp ＝ 到文本 (计次) ＋ “ |平台: XBOX |”
+                    
+                .判断 (data.取整数 (“//[” ＋ 到文本 (计次) ＋ “].membershipType”) ＝ 2)
+                    tmp ＝ 到文本 (计次) ＋ “ |平台: PS |”
+                    
+                .判断 (data.取整数 (“//[” ＋ 到文本 (计次) ＋ “].membershipType”) ＝ 3)
+                    tmp ＝ 到文本 (计次) ＋ “ |平台: STEAM |”
+                .默认
+                    
+                .判断结束
+                tmp ＝ tmp ＋ “昵称: ” ＋ data.取文本 (“//[” ＋ 到文本 (计次) ＋ “].displayName”) ＋ “ |游戏编号: ” ＋ data.取文本 (“//[” ＋ 到文本 (计次) ＋ “].membershipId”)
+                body ＝ body ＋ tmp ＋ #换行符
+                
+            .计次循环尾 ()
+            
+            .判断开始 (type ＝ “1”)
+                CQ.发送私聊消息 (Q号, head ＋ body, 假)
+            .默认
+                CQ.发送群消息 (群号, CQ.At (Q号) ＋ #换行符 ＋ head ＋ body, 假)
+            .判断结束
+            
+            
+        .判断 (data.取数量 () ＝ 0)
+            
+            .判断开始 (type ＝ “1”)
+                CQ.发送私聊消息 (Q号, “搜！不！到！”, 假)
+            .默认
+                CQ.发送群消息 (群号, CQ.At (Q号) ＋ “搜！不！到！”, 假)
+            .判断结束
+            
+        .判断 (data.取数量 () ＞ 3)
+            head ＝ “=====搜索结果大于3个,将返回前3个结果=====” ＋ #换行符
+            .计次循环首 (3, 计次)
+                .判断开始 (data.取整数 (“//[” ＋ 到文本 (计次) ＋ “].membershipType”) ＝ 1)
+                    tmp ＝ 到文本 (计次) ＋ “ |平台: XBOX |”
+                    
+                .判断 (data.取整数 (“//[” ＋ 到文本 (计次) ＋ “].membershipType”) ＝ 2)
+                    tmp ＝ 到文本 (计次) ＋ “ |平台: PS |”
+                    
+                .判断 (data.取整数 (“//[” ＋ 到文本 (计次) ＋ “].membershipType”) ＝ 3)
+                    tmp ＝ 到文本 (计次) ＋ “ |平台: STEAM |”
+                .默认
+                    
+                .判断结束
+                tmp ＝ tmp ＋ “昵称: ” ＋ data.取文本 (“//[” ＋ 到文本 (计次) ＋ “].displayName”) ＋ “ |游戏编号: ” ＋ data.取文本 (“//[” ＋ 到文本 (计次) ＋ “].membershipId”)
+                body ＝ body ＋ tmp ＋ #换行符
+                
+            .计次循环尾 ()
+            
+            .判断开始 (type ＝ “1”)
+                CQ.发送私聊消息 (Q号, head ＋ body, 假)
+            .默认
+                CQ.发送群消息 (群号, CQ.At (Q号) ＋ #换行符 ＋ head ＋ body, 假)
+            .判断结束
+            
+        .默认
+            
+        .判断结束
+        
+    .判断 (type ＝ “1”)
+        CQ.发送私聊消息 (Q号, Response, 真)
+    .默认
+        CQ.发送群消息 (群号, CQ.At (Q号) ＋ Response, 假)
+    .判断结束
+    
+

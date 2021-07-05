@@ -1,0 +1,352 @@
+﻿.版本 2
+.支持库 e2ee
+
+.程序集 类_Bungie, , 公开
+.子程序 _初始化, , , 当基于本类的对象被创建后，此方法会被自动调用
+    
+
+.子程序 _销毁, , , 当基于本类的对象被销毁前，此方法会被自动调用
+    
+
+.子程序 User_GetBungieNetUserById, 文本型, 公开
+    .参数 ID, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/GetBungieNetUserById/” ＋ ID, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/GetBungieNetUserById/” ＋ ID, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取键值表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 User_SearchUsers, 文本型, 公开
+    .参数 q, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取列表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/SearchUsers/?q=” ＋ q, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/SearchUsers/?q=” ＋ q, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取列表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 User_GetMembershipDataById, 文本型, 公开
+    .参数 membershipId, 文本型
+    .参数 membershipType, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/GetMembershipsById/” ＋ membershipId ＋ “/” ＋ membershipType, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/GetMembershipsById/” ＋ membershipId ＋ “/” ＋ membershipType, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取键值表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 User_GetMembershipFromHardLinkedCredential, 文本型, 公开
+    .参数 credential, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/GetMembershipFromHardLinkedCredential/SteamId/” ＋ credential, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/User/GetMembershipFromHardLinkedCredential/SteamId/” ＋ credential, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取键值表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 Destiny2_GetDestinyManifest, 文本型, 公开
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取列表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/Manifest/”, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/Manifest/”, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取列表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 Destiny2_SearchDestinyPlayer, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 displayName, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取列表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayer/” ＋ membershipType ＋ “/” ＋ displayName, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayer/” ＋ membershipType ＋ “/” ＋ displayName, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取列表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 Destiny2_GetProfile, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 membershipId, 文本型
+    .参数 components, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/” ＋ membershipType ＋ “/Profile/” ＋ membershipId ＋ “/?components=” ＋ components, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/” ＋ membershipType ＋ “/Profile/” ＋ membershipId ＋ “/?components=” ＋ components, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取键值表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 Destiny2_GetHistoricalStatsForAccount, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 membershipId, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/” ＋ membershipType ＋ “/Account/” ＋ membershipId ＋ “/Stats/”, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/” ＋ membershipType ＋ “/Account/” ＋ membershipId ＋ “/Stats/”, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取键值表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 Destiny2_GetActivityHistory, 文本型, 公开
+    .参数 membershipType, 文本型
+    .参数 MembershipId, 文本型
+    .参数 characterId, 文本型
+    .参数 count, 文本型
+    .参数 mode, 文本型
+    .参数 page, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    .判断开始 (启用代理)
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/” ＋ membershipType ＋ “/Account/” ＋ MembershipId ＋ “/Character/” ＋ characterId ＋ “/Stats/Activities/” ＋ “?count=” ＋ count ＋ “&mode=” ＋ mode ＋ “&page=” ＋ page, 0, , , , 协议头, , , , , 代理地址)), , , )
+    .默认
+        tmp.从JSON载入 (编码_Utf8到Ansi (网页_访问_对象 (“https://www.bungie.net/Platform/Destiny2/” ＋ membershipType ＋ “/Account/” ＋ MembershipId ＋ “/Character/” ＋ characterId ＋ “/Stats/Activities/” ＋ “?count=” ＋ count ＋ “&mode=” ＋ mode ＋ “&page=” ＋ page, 0, , , , 协议头)), , , )
+    .判断结束
+    
+    .判断开始 (tmp.取整数 (“//ErrorCode”) ＝ 1)
+        tmp.取键值表 (“//Response”, data)
+        返回 (data.到JSON (假, , ))
+    .默认
+        返回 (tmp.取文本 (“//Message”))
+    .判断结束
+    
+
+.子程序 置秘钥, , 公开
+    .参数 X_API_KEY, 文本型
+
+    协议头 ＝ 子文本替换 (#协议头, “$1”, X_API_KEY, , , 真)
+    
+
+.子程序 置代理, , 公开
+    .参数 地址, 文本型, , 格式 0.0.0.0:0
+
+    启用代理 ＝ 真
+    代理地址 ＝ 地址
+    
+
+.子程序 更新jsonWCCP_chs, 文本型, 公开, 成功返回 "0"
+    .局部变量 路径, 文本型
+    .局部变量 文件名, 文本型
+    .局部变量 res, 文本型
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    路径 ＝ 取运行目录 () ＋ “\D2TMP\”
+    文件名 ＝ “WCCP-CHS.json”
+    
+    res ＝ Destiny2_GetDestinyManifest ()
+    .判断开始 (tmp.从JSON载入 (res, , , ))
+        tmp.取键值表 (“//jsonWorldComponentContentPaths.zh-chs”, data)
+        
+        .判断开始 (data.另存文件 (路径 ＋ 文件名, 0))
+            返回 (“0”)
+        .默认
+            返回 (“保存失败”)
+        .判断结束
+        
+    .默认
+        返回 (res)
+    .判断结束
+    
+
+.子程序 更新DestinyActivityDefinition, 文本型, 公开, 成功返回 "0"
+    .局部变量 路径, 文本型
+    .局部变量 文件名, 文本型
+    .局部变量 WCCP, 文本型
+    .局部变量 res, 字节集
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    路径 ＝ 取运行目录 () ＋ “\D2TMP\”
+    文件名 ＝ “DestinyActivityDefinition.json”
+    WCCP ＝ 路径 ＋ “WCCP-CHS.json”
+    
+    .如果真 (取反 (路径_是否为文件 (WCCP)))
+        .如果真 (更新jsonWCCP_chs () ≠ “0”)
+            返回 (“WCCP更新失败”)
+        .如果真结束
+        
+    .如果真结束
+    
+    tmp.从文件载入 (WCCP, 0)
+    .判断开始 (启用代理)
+        res ＝ 网页_访问_对象 (“https://www.bungie.net” ＋ tmp.取文本 (“//DestinyActivityDefinition”), 0, , , , 协议头, , , , , 代理地址)
+    .默认
+        res ＝ 网页_访问_对象 (“https://www.bungie.net” ＋ tmp.取文本 (“//DestinyActivityDefinition”), 0, , , , 协议头)
+    .判断结束
+    
+    .判断开始 (data.从JSON载入 (res, #文本编码格式_UTF8, , ))
+        
+        .判断开始 (data.另存文件 (路径 ＋ 文件名, 0))
+            返回 (“0”)
+        .默认
+            返回 (“保存失败”)
+        .判断结束
+        
+    .默认
+        返回 (编码_Utf8到Ansi (res))
+    .判断结束
+    
+
+.子程序 更新DestinyActivityModifierDefinition, 文本型, 公开, 成功返回 "0"
+    .局部变量 路径, 文本型
+    .局部变量 文件名, 文本型
+    .局部变量 WCCP, 文本型
+    .局部变量 res, 字节集
+    .局部变量 tmp, 存取键值表
+    .局部变量 data, 存取键值表
+
+    路径 ＝ 取运行目录 () ＋ “\D2TMP\”
+    文件名 ＝ “DestinyActivityModifierDefinition.json”
+    WCCP ＝ 路径 ＋ “WCCP-CHS.json”
+    
+    .如果真 (取反 (路径_是否为文件 (WCCP)))
+        .如果真 (更新jsonWCCP_chs () ≠ “0”)
+            返回 (“WCCP更新失败”)
+        .如果真结束
+        
+    .如果真结束
+    
+    tmp.从文件载入 (WCCP, 0)
+    .判断开始 (启用代理)
+        res ＝ 网页_访问_对象 (“https://www.bungie.net” ＋ tmp.取文本 (“//DestinyActivityModifierDefinition”), 0, , , , 协议头, , , , , 代理地址)
+    .默认
+        res ＝ 网页_访问_对象 (“https://www.bungie.net” ＋ tmp.取文本 (“//DestinyActivityModifierDefinition”), 0, , , , 协议头)
+    .判断结束
+    
+    .判断开始 (data.从JSON载入 (res, #文本编码格式_UTF8, , ))
+        
+        .判断开始 (data.另存文件 (路径 ＋ 文件名, 0))
+            返回 (“0”)
+        .默认
+            返回 (“保存失败”)
+        .判断结束
+        
+    .默认
+        返回 (编码_Utf8到Ansi (res))
+    .判断结束
+    
+
+.子程序 classType转文本, 文本型, 公开
+    .参数 classType, 文本型
+
+    .判断开始 (classType ＝ “0”)
+        返回 (“泰坦”)
+    .判断 (classType ＝ “1”)
+        返回 (“猎人”)
+    .判断 (classType ＝ “2”)
+        返回 (“术士”)
+    .默认
+        返回 (“”)
+    .判断结束
+    
+
+.子程序 classHash转文本, 文本型, 公开
+    .参数 classHash, 文本型
+
+    .判断开始 (classHash ＝ “3655393761”)
+        返回 (“泰坦”)
+    .判断 (classHash ＝ “671679327”)
+        返回 (“猎人”)
+    .判断 (classHash ＝ “2271682572”)
+        返回 (“术士”)
+    .默认
+        返回 (“”)
+    .判断结束
+    
+
+.子程序 ActivityHash转文本, 文本型, 公开
+    .参数 Hash, 文本型
+    .局部变量 文件, 文本型
+    .局部变量 data, 存取键值表
+
+    文件 ＝ 取运行目录 () ＋ “\D2TMP\DestinyActivityDefinition.json”
+    
+    .如果真 (取反 (路径_是否为文件 (文件)))
+        .如果真 (更新DestinyActivityDefinition () ≠ “0”)
+            返回 (“WCCP更新失败”)
+        .如果真结束
+        
+    .如果真结束
+    
+    data.从文件载入 (文件, 0)
+    返回 (data.取文本 (“//” ＋ Hash ＋ “.displayProperties.name”))
+    
+

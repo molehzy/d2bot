@@ -1,0 +1,299 @@
+﻿.版本 2
+.支持库 CommonSupport
+.支持库 iext2
+
+.程序集 CQHTTP
+.子程序 private, , , 私聊消息
+    .参数 message, 文本型, , 消息内容
+    .参数 message_id, 文本型, , 消息 ID
+    .参数 nickname, 文本型, , 昵称
+    .参数 user_id, 文本型, , 发送者 QQ 号
+    .参数 sub_type, 文本型, , 消息子类型(friend、group、other)
+    .局部变量 p, 整数型
+
+    .如果真 (message ＝ “”)
+        返回 ()
+    .如果真结束
+    
+    p ＝ 常用_无限传参 (1, user_id, “0”, message)
+    线程池_消息.投递任务 (p)
+    
+
+.子程序 group, , , 群消息
+    .参数 group_id, 文本型, , 群号
+    .参数 message, 文本型, , 消息内容
+    .参数 message_id, 文本型, , 消息 ID
+    .参数 card, 文本型, , 群名片／备注
+    .参数 nickname, 文本型, , 昵称
+    .参数 role, 文本型, , 角色，owner 或 admin 或 member
+    .参数 user_id, 文本型, , 发送者 QQ 号
+    .参数 sub_type, 文本型, , 消息子类型(normal、anonymous、notice)
+    .局部变量 p, 整数型
+
+    .如果真 (读配置项 (群配置文件, group_id, “总开关”, “关”) ＝ “关”)
+        返回 ()
+    .如果真结束
+    
+    .如果真 (message ＝ “”)
+        返回 ()
+    .如果真结束
+    
+    p ＝ 常用_无限传参 (2, user_id, group_id, message)
+    线程池_消息.投递任务 (p)
+    
+
+.子程序 notice, , , 通知事件
+    .参数 notice_type, 文本型, , 通知类型
+    .参数 name, 文本型, , 文件名
+    .参数 size, 文本型, , 文件大小（字节数）
+    .参数 url, 文本型, , 文件链接
+    .参数 group_id, 文本型, , 群号
+    .参数 user_id, 文本型, , QQ 号
+    .参数 sub_type, 文本型, , 事件子类型
+    .参数 operator_id, 文本型, , 操作者 QQ 号
+    .参数 duration, 文本型, , 禁言时长，单位秒
+    .参数 message_id, 文本型, , 被撤回的消息 ID
+
+    
+
+.子程序 request, , , 请求事件
+    .参数 request_type, 文本型, , 请求类型
+    .参数 sub_type, 文本型, , 请求子类型
+    .参数 group_id, 文本型, , 群号
+    .参数 user_id, 文本型, , 发送请求的 QQ 号
+    .参数 comment, 文本型, , 验证信息
+    .参数 flag, 文本型, , 请求 flag，在调用处理请求的 API 时需要传入
+
+    
+
+.子程序 ws, , , ws客户端消息
+    .参数 msg, 文本型
+    .局部变量 正则, 正则表达式类
+
+    正则.创建 (“{.*}”, msg, , , , )
+    .如果真 (正则.取匹配数量 () ＝ 0)
+        日志 (msg)
+        
+        .如果真 (msg ＝ “WS断开连接”)
+            _启动窗口.按钮_连接.禁止 ＝ 假
+            _启动窗口.编辑框_WS.禁止 ＝ 假
+            _启动窗口.编辑框_Token.禁止 ＝ 假
+            _启动窗口.编辑框_HTTP.禁止 ＝ 假
+            _启动窗口.超级按钮_群刷新.禁止 ＝ 真
+        .如果真结束
+        
+    .如果真结束
+    
+
+.子程序 消息处理
+    .参数 p, 整数型
+    .局部变量 type, 整数型
+    .局部变量 user_id, 文本型
+    .局部变量 group_id, 文本型
+    .局部变量 message, 文本型
+    .局部变量 a, 文本型, , "0"
+    .局部变量 b, 文本型
+    .局部变量 id, 文本型
+    .局部变量 i, 整数型
+    .局部变量 正则, 正则表达式类
+
+    常用_无限传参还原 (p, type, user_id, group_id, message)
+    
+    词库_读正则 (a)
+    .计次循环首 (取数组成员数 (a), i)
+        正则.创建 (a [i], message)
+        .如果真 (正则.取匹配文本 (1) ＝ message)
+            .判断开始 (词库_读内容 (a [i], b) ＝ “文本”)
+                .判断开始 (type ＝ 1)
+                    CQ.发送私聊消息 (user_id, b, 假)
+                    返回 ()
+                .默认
+                    CQ.发送群消息 (group_id, b, 假)
+                    返回 ()
+                .判断结束
+                
+            .判断 (type ＝ 1)
+                CQ.发送私聊消息 (user_id, CQ.Image (b, , “ 0”), 假)
+                返回 ()
+            .默认
+                CQ.发送群消息 (group_id, CQ.Image (b, , “0”), 假)
+                返回 ()
+            .判断结束
+            
+        .如果真结束
+        
+    .计次循环尾 ()
+    
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “突袭”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        .判断开始 (正则.取子匹配文本 (1, 1) ＝ “”)
+            .判断开始 (正则.取子匹配文本 (1, 2) ＝ “”)
+                .判断开始 (绑定_读SteamID (user_id) ＝ “”)
+                    .判断开始 (type ＝ 1)
+                        CQ.发送私聊消息 (user_id, “你还没有绑定”, 假)
+                        
+                    .默认
+                        CQ.发送群消息 (group_id, CQ.At (user_id) ＋ “你还没有绑定”, 假)
+                    .判断结束
+                    
+                .默认
+                    启动线程_任意文本参 (&raid_report, 到文本 (type), user_id, group_id, “0”)
+                .判断结束
+                
+            .默认
+                启动线程_任意文本参 (&raid_report, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 2))
+            .判断结束
+            
+        .默认
+            启动线程_任意文本参 (&raid_report, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 1))
+        .判断结束
+        
+        返回 ()
+    .如果真结束
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “地牢”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        .判断开始 (正则.取子匹配文本 (1, 1) ＝ “”)
+            .判断开始 (正则.取子匹配文本 (1, 2) ＝ “”)
+                .判断开始 (绑定_读SteamID (user_id) ＝ “”)
+                    .判断开始 (type ＝ 1)
+                        CQ.发送私聊消息 (user_id, “你还没有绑定”, 假)
+                        
+                    .默认
+                        CQ.发送群消息 (group_id, CQ.At (user_id) ＋ “你还没有绑定”, 假)
+                    .判断结束
+                    
+                .默认
+                    启动线程_任意文本参 (&dungeon_report, 到文本 (type), user_id, group_id, “0”)
+                .判断结束
+                
+            .默认
+                启动线程_任意文本参 (&dungeon_report, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 2))
+            .判断结束
+            
+        .默认
+            启动线程_任意文本参 (&dungeon_report, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 1))
+        .判断结束
+        
+        返回 ()
+    .如果真结束
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “Steam搜索”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        启动线程_任意文本参 (&GetMembershipFromHardLinkedCredential, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 1))
+        返回 ()
+    .如果真结束
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “历史统计”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        .判断开始 (正则.取子匹配文本 (1, 1) ＝ “”)
+            .判断开始 (正则.取子匹配文本 (1, 2) ＝ “”)
+                .判断开始 (绑定_读SteamID (user_id) ＝ “”)
+                    .判断开始 (type ＝ 1)
+                        CQ.发送私聊消息 (user_id, “你还没有绑定”, 假)
+                        
+                    .默认
+                        CQ.发送群消息 (group_id, CQ.At (user_id) ＋ “你还没有绑定”, 假)
+                    .判断结束
+                    
+                .默认
+                    启动线程_任意文本参 (&historicalstat, 到文本 (type), user_id, group_id, “0”)
+                .判断结束
+                
+            .默认
+                启动线程_任意文本参 (&historicalstat, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 2))
+            .判断结束
+            
+        .默认
+            启动线程_任意文本参 (&historicalstat, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 1))
+        .判断结束
+        
+        返回 ()
+    .如果真结束
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “角色”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        .判断开始 (正则.取子匹配文本 (1, 1) ＝ “”)
+            .判断开始 (正则.取子匹配文本 (1, 2) ＝ “”)
+                .判断开始 (绑定_读SteamID (user_id) ＝ “”)
+                    .判断开始 (type ＝ 1)
+                        CQ.发送私聊消息 (user_id, “你还没有绑定”, 假)
+                        
+                    .默认
+                        CQ.发送群消息 (group_id, CQ.At (user_id) ＋ “你还没有绑定”, 假)
+                    .判断结束
+                    
+                .默认
+                    启动线程_任意文本参 (&GetProfile, 到文本 (type), user_id, group_id, “0”)
+                .判断结束
+                
+            .默认
+                启动线程_任意文本参 (&GetProfile, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 2))
+            .判断结束
+            
+        .默认
+            启动线程_任意文本参 (&GetProfile, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 1))
+        .判断结束
+        
+        返回 ()
+    .如果真结束
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “ELO”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        .判断开始 (正则.取子匹配文本 (1, 1) ＝ “”)
+            .判断开始 (正则.取子匹配文本 (1, 2) ＝ “”)
+                .判断开始 (绑定_读SteamID (user_id) ＝ “”)
+                    .判断开始 (type ＝ 1)
+                        CQ.发送私聊消息 (user_id, “你还没有绑定”, 假)
+                        
+                    .默认
+                        CQ.发送群消息 (group_id, CQ.At (user_id) ＋ “你还没有绑定”, 假)
+                    .判断结束
+                    
+                .默认
+                    启动线程_任意文本参 (&elo, 到文本 (type), user_id, group_id, “0”)
+                .判断结束
+                
+            .默认
+                启动线程_任意文本参 (&elo, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 2))
+            .判断结束
+            
+        .默认
+            启动线程_任意文本参 (&elo, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 1))
+        .判断结束
+        
+        返回 ()
+    .如果真结束
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “绑定”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        启动线程_任意文本参 (&绑定_添加, 到文本 (type), user_id, group_id, 正则.取子匹配文本 (1, 1))
+        返回 ()
+    .如果真结束
+    
+    正则.创建 (读配置项 (配置文件, “BOT”, “读绑定”, ), message)
+    .如果真 (正则.取匹配文本 (1) ＝ message)
+        id ＝ “SteamID: ” ＋ 绑定_读SteamID (user_id) ＋ #换行符
+        id ＝ id ＋ “游戏编号: ” ＋ 绑定_读membershipId (user_id)
+        .判断开始 (id ＝ “”)
+            .判断开始 (type ＝ 1)
+                CQ.发送私聊消息 (user_id, “你还没有绑定”, 假)
+                返回 ()
+            .默认
+                CQ.发送群消息 (group_id, CQ.At (user_id) ＋ “你还没有绑定”, 假)
+                返回 ()
+            .判断结束
+            
+        .判断 (type ＝ 1)
+            CQ.发送私聊消息 (user_id, id, 假)
+            返回 ()
+        .默认
+            CQ.发送群消息 (group_id, CQ.At (user_id) ＋ #换行符 ＋ id, 假)
+            返回 ()
+        .判断结束
+        
+    .如果真结束
+    
+    
+

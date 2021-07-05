@@ -1,0 +1,140 @@
+﻿.版本 2
+.支持库 CommonSupport
+.支持库 e2ee
+
+.程序集 绑定
+.子程序 绑定_初始化
+    绑定许可证.创建 ()
+    日志 (“绑定载入: ” ＋ 到文本 (绑定DB.从字节集载入 (LZMA解压数据 (读入文件 (绑定信息文件)))))
+    
+
+.子程序 绑定_添加
+    .参数 type, 文本型
+    .参数 QQ, 文本型
+    .参数 Group, 文本型
+    .参数 SteamID, 文本型
+    .局部变量 Bungie, 类_Bungie
+    .局部变量 statuscode, 整数型
+    .局部变量 Res, 文本型
+    .局部变量 正则, 正则表达式类
+    .局部变量 data, 存取键值表
+    .局部变量 info, 文本型
+    .局部变量 membershipId, 文本型
+
+    .判断开始 (type ＝ “1”)
+        日志 (“绑定 | 线程启动 ( ” ＋ QQ ＋ “ )”)
+    .默认
+        日志 (“绑定 | 线程启动 ( ” ＋ Group ＋ “ | ” ＋ QQ ＋ “ )”)
+    .判断结束
+    
+    Bungie.置秘钥 (读配置项 (配置文件, “D2”, “X-API-KEY”, ))
+    .如果真 (启用代理)
+        Bungie.置代理 (读配置项 (配置文件, “D2”, “HTTP代理”, ))
+    .如果真结束
+    
+    .判断开始 (启用代理)
+        Res ＝ 编码_Utf8到Ansi (网页_访问_对象 (“https://steamcommunity.com/profiles/” ＋ SteamID, 0, , , , #协议头, , statuscode, , , 读配置项 (配置文件, “D2”, “HTTP代理”, )))
+    .默认
+        Res ＝ 编码_Utf8到Ansi (网页_访问_对象 (“https://steamcommunity.com/profiles/” ＋ SteamID, 0, , , , #协议头, , statuscode))
+    .判断结束
+    
+    .判断开始 (type ＝ “1”)
+        日志 (“绑定 | 网页_访问_状态 ” ＋ 到文本 (statuscode) ＋ “ ( ” ＋ QQ ＋ “ )”)
+    .默认
+        日志 (“绑定 | 网页_访问_状态 ” ＋ 到文本 (statuscode) ＋ “ ( ” ＋ Group ＋ “ | ” ＋ QQ ＋ “ )”)
+    .判断结束
+    
+    正则.创建 (“g_rgProfileData = (\{.+\})”, Res)
+    
+    .判断开始 (type ＝ “1”)
+        日志 (“绑定 | 正则匹配 ” ＋ 正则.取匹配文本 (1) ＋ “ ( ” ＋ QQ ＋ “ )”)
+    .默认
+        日志 (“绑定 | 正则匹配 ” ＋ 正则.取匹配文本 (1) ＋ “ ( ” ＋ Group ＋ “ | ” ＋ QQ ＋ “ )”)
+    .判断结束
+    
+    .判断开始 (正则.取子匹配文本 (1, 1) ＝ “”)
+        .判断开始 (type ＝ “1”)
+            日志 (“绑定 | [Link To ID] 从Steam服务器获取失败 ( ” ＋ QQ ＋ “ )”)
+        .默认
+            日志 (“绑定 | [Link To ID] 从Steam服务器获取失败 ( ” ＋ Group ＋ “ | ” ＋ QQ ＋ “ )”)
+        .判断结束
+        
+        .判断开始 (type ＝ “1”)
+            CQ.发送私聊消息 (QQ, “[Link To ID] 从Steam服务器获取失败”, 假)
+        .默认
+            CQ.发送群消息 (Group, “[Link To ID] 从Steam服务器获取失败”, 假)
+        .判断结束
+        
+    .默认
+        data.从JSON载入 (正则.取子匹配文本 (1, 1), , , )
+        info ＝ “Steam昵称: ” ＋ data.取文本 (“//personaname”) ＋ #换行符 ＋ “SteamID: ” ＋ data.取文本 (“//steamid”) ＋ #换行符
+        
+        Res ＝ Bungie.User_GetMembershipFromHardLinkedCredential (SteamID)
+        .判断开始 (data.从JSON载入 (Res, , , ))
+            .判断开始 (type ＝ “1”)
+                日志 (“绑定 | 获取游戏编号 ” ＋ data.取文本 (“//membershipId”) ＋ “ ( ” ＋ QQ ＋ “ )”)
+            .默认
+                日志 (“绑定 | 获取游戏编号 ” ＋ data.取文本 (“//membershipId”) ＋ “ ( ” ＋ Group ＋ “ | ” ＋ QQ ＋ “ )”)
+            .判断结束
+            
+            membershipId ＝ data.取文本 (“//membershipId”)
+            info ＝ info ＋ “游戏编号: ” ＋ membershipId
+            
+            data.创建 (“SteamID”, SteamID, “membershipId”, membershipId)
+            .判断开始 (type ＝ “1”)
+                日志 (“绑定 | 保存信息 ” ＋ data.到JSON (假, , , , ) ＋ “ ( ” ＋ QQ ＋ “ )”)
+            .默认
+                日志 (“绑定 | 保存信息 ” ＋ data.到JSON (假, , , , ) ＋ “ ( ” ＋ Group ＋ “ | ” ＋ QQ ＋ “ )”)
+            .判断结束
+            
+            绑定许可证.进入 ()
+            绑定DB.置键值表 (“//” ＋ QQ, data, )
+            写到文件 (绑定信息文件, LZMA压缩数据 (绑定DB.到字节集 (真), 9))
+            绑定DB.从字节集载入 (LZMA解压数据 (读入文件 (绑定信息文件)))
+            绑定许可证.退出 ()
+            
+            .判断开始 (type ＝ “1”)
+                CQ.发送私聊消息 (QQ, “已绑定” ＋ #换行符 ＋ info, 假)
+            .默认
+                CQ.发送群消息 (Group, CQ.At (QQ) ＋ #换行符 ＋ “已绑定” ＋ #换行符 ＋ info, 假)
+            .判断结束
+            
+        .判断 (type ＝ “1”)
+            CQ.发送私聊消息 (QQ, Res, 假)
+        .默认
+            CQ.发送群消息 (Group, CQ.At (QQ) ＋ “绑定 | ” ＋ Res, 假)
+        .判断结束
+        
+    .判断结束
+    
+
+.子程序 绑定_读信息, 存取键值表
+    .参数 QQ, 文本型
+    .局部变量 data, 存取键值表
+
+    绑定许可证.进入 ()
+    绑定DB.取键值表 (“//” ＋ QQ, data)
+    绑定许可证.退出 ()
+    返回 (data)
+    
+
+.子程序 绑定_读SteamID, 文本型
+    .参数 QQ, 文本型
+    .局部变量 data, 文本型
+
+    绑定许可证.进入 ()
+    data ＝ 绑定DB.取文本 (“//” ＋ QQ ＋ “.SteamID”)
+    绑定许可证.退出 ()
+    返回 (data)
+    
+
+.子程序 绑定_读membershipId, 文本型
+    .参数 QQ, 文本型
+    .局部变量 data, 文本型
+
+    绑定许可证.进入 ()
+    data ＝ 绑定DB.取文本 (“//” ＋ QQ ＋ “.membershipId”)
+    绑定许可证.退出 ()
+    返回 (data)
+    
+

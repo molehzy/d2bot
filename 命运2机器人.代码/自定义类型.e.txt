@@ -1,0 +1,15 @@
+﻿.版本 2
+
+.数据类型 账户信息
+    .成员 emblemBackgroundPath, 文本型
+    .成员 dateLastPlayed, 文本型
+    .成员 minutesPlayedTotal, 文本型
+    .成员 light, 文本型
+    .成员 classType, 文本型
+    .成员 敏捷, 文本型
+    .成员 韧性, 文本型
+    .成员 恢复, 文本型
+    .成员 纪律, 文本型
+    .成员 智慧, 文本型
+    .成员 力量, 文本型
+

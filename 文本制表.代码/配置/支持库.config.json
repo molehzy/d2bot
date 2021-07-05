@@ -1,0 +1,26 @@
+﻿[
+    {
+        "CmdCount": 201,
+        "Guid": "d09f2340818511d396f6aaf844c7e325",
+        "Key": "krnln",
+        "MaxRefConstPos": 4,
+        "MaxRefObjectPos": 11,
+        "Name": "系统核心支持库",
+        "Version": {
+            "Major": 5,
+            "Minor": 7
+        }
+    },
+    {
+        "CmdCount": 1,
+        "Guid": "5F99C1642A2F4e03850721B4F5D7C3F8",
+        "Key": "EThread",
+        "MaxRefConstPos": 0,
+        "MaxRefObjectPos": 0,
+        "Name": "多线程支持库",
+        "Version": {
+            "Major": 2,
+            "Minor": 0
+        }
+    }
+]

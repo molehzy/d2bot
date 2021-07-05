@@ -1,0 +1,1 @@
+.*"duration":(\d+),"group_id":(\d+),.*"operator_id":(\d+),.*"sub_type":"(\w+)",.*"user_id":(\d+).*
