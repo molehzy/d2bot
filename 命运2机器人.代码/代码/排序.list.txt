@@ -8,7 +8,6 @@ __HIDDEN_TEMP_MOD__
 图片编辑类
 分层画板
 类_Bungie
-日志
 普通填表
 外部树型框
 外部控件操作
@@ -77,3 +76,4 @@ HashMap_StrInt
 类_InlineHook
 类_系统音量
 类_屏蔽菜单
+类_日志

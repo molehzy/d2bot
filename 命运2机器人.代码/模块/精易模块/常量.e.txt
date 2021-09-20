@@ -1307,3 +1307,8 @@
 .常量 HOTKEYF_CONTROL, "2", , CTRL 键
 .常量 HOTKEYF_ALT, "4", , ALT键
 .常量 HOTKEYF_EXT, "8", , 扩展键
+.常量 CRYPT_STRING_BASE64, "1", , Base64，没有标头。
+.常量 CRYPT_STRING_HEX, "4", , 仅十六进制。
+.常量 CRYPT_STRING_HEXRAW, "12", , 一个原始的十六进制字符串。Windows Server 2003 和 Windows XP：  不支持此值。
+.常量 CRYPT_STRING_NOCRLF, "1073741824", , 不要将任何新行字符附加到编码字符串。默认行为是使用回车/换行 (CR/LF) 对 (0x0D/0x0A) 来表示新行。Windows Server 2003 和 Windows XP：  不支持此值。
+.常量 CRYPT_STRING_NOCR, "2147483648", , 仅对新行使用换行 (LF) 字符 (0x0A)。默认行为是使用 CR/LF 对 (0x0D/0x0A) 来表示新行。

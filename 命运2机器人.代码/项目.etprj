@@ -1,6 +1,5 @@
 {
-    "AsyncFile": false,
-    "Dest": "",
+    "AsyncFile": true,
     "E2TXT-EFile": "",
     "E2TXT-InSourceDir": true,
     "E2TXT-IsCreateE": true,
@@ -9,8 +8,5 @@
     "NameStyle": 2,
     "Password": "",
     "ResetNames": [],
-    "Source": "../命运2机器人.e",
-    "TXT2E-CreateLog": true,
-    "TXT2E-EFile": "",
-    "TXT2E-InSourceDir": true
+    "Source": "../命运2机器人.e"
 }

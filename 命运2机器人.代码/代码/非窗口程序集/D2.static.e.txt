@@ -644,6 +644,7 @@
     .局部变量 分数, 文本型
     .局部变量 段位, 文本型
     .局部变量 排名, 文本型
+    .局部变量 KD, 文本型
     .局部变量 Body, 文本型, , "0"
     .局部变量 正则, 正则表达式类
     .局部变量 a, 文本型
@@ -736,8 +737,9 @@
                     分数 ＝ “分数: ” ＋ data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.displayValue”)
                     段位 ＝ “段位: ” ＋ data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.metadata.rankName”)
                     排名 ＝ “排名: ” ＋ data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.rank”) ＋ “ (” ＋ D2_前百分比 (data.取双精度小数 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.elo.percentile”)) ＋ “)”
+                    KD ＝ “K/D: ” ＋ data.取文本 (“//data.segments[” ＋ 到文本 (i) ＋ “].stats.kd.displayValue”)
                     
-                    加入成员 (Body, 活动 ＋ “|” ＋ 分数 ＋ “|” ＋ 段位 ＋ “|” ＋ 排名)
+                    加入成员 (Body, 活动 ＋ “|” ＋ 分数 ＋ “|” ＋ 段位 ＋ “|” ＋ KD ＋ “|” ＋ 排名)
                     
                 .判断结束
                 
@@ -751,7 +753,7 @@
                 .判断结束
                 
             .默认
-                a ＝ 文本制表_表脚 (取数组成员数 (Body), 4, Body, t)
+                a ＝ 文本制表_表脚 (取数组成员数 (Body), 5, Body, t)
                 b ＝ 分割文本 (a, #换行符, )
                 
                 hb.创建 (1, 1, #白色, )

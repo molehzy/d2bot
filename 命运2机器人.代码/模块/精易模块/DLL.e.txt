@@ -134,6 +134,9 @@
     .参数 lpImageFileName, 文本型
     .参数 nSize, 整数型
 
+.DLL命令 关闭内核对象_, 整数型, "kernel32.dll", "CloseHandle", 公开, $(b)非零表示成功，零表示失败
+    .参数 对象句柄, 整数型, , hObject，欲关闭的一个对象的句柄
+
 .DLL命令 QueryDosDeviceA, 整数型, "kernel32.dll", "QueryDosDeviceA", 公开
     .参数 lpDeviceName, 文本型
     .参数 lpTargetPath, 文本型
