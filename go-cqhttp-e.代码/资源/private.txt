@@ -1,1 +1,0 @@
-.*"message":"(.*)","message_id":(.*),"message_type.*"sender":{.*"nickname":"(.*)",".*"user_id":(\d+)},"sub_type":"(\w+)",.*

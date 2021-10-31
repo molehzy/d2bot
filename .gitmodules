@@ -1,0 +1,3 @@
+[submodule "go-cqhttp-e"]
+	path = go-cqhttp-e
+	url = https://github.com/molehzy/go-cqhttp-e

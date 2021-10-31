@@ -1,2 +1,0 @@
-Authorization: Bearer $
-Content-Type: application/json
